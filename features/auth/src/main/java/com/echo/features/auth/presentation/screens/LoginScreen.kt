@@ -10,10 +10,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
 import androidx.compose.material.icons.rounded.Password
+import androidx.compose.material.icons.rounded.PersonAdd
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,15 +26,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.echo.core.network.models.UserForm
 import com.echo.core.uikit.components.EchoDivider
+import com.echo.core.uikit.components.EchoPrimaryButton
 import com.echo.core.uikit.components.EchoTextField
 import com.echo.core.uikit.ui.theme.EchoTheme
+import com.echo.features.auth.presentation.states.AuthUiState
+import com.echo.features.auth.presentation.viewModels.AuthViewModel
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+    onSuccess: (Long) -> Unit,
+    viewModel: AuthViewModel = DaggerAuthComponent.create().getViewModel()
+){
+    val state by viewModel.uiState.collectAsState()
+
     var nicknameText : String by rememberSaveable() { mutableStateOf("@") }
     var passwordText : String by rememberSaveable() { mutableStateOf("")}
 
+    LaunchedEffect(state) {
+        if (state is AuthUiState.Success) {
+            onSuccess((state as AuthUiState.Success).userId)
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -76,14 +93,20 @@ fun LoginScreen(){
                 isPassword = true
             )
 
+            Spacer(Modifier.height(25.dp))
+
+            EchoPrimaryButton(
+                text = "Вход",
+                onClick = {
+                    val form = UserForm(nicknameText, passwordText)
+                    viewModel.login(form)
+                },
+                modifier = Modifier.height(55.dp).width(205.dp),
+                enabled = state !is AuthUiState.Loading && nullsLast {  }.isNotBlank() && passwordText.isNotBlank(),
+                icon = Icons.Rounded.PersonAdd
+            )
+
         }
     }
 }
 
-@Preview
-@Composable
-fun LoginScreenPreview(){
-    EchoTheme {
-        LoginScreen()
-    }
-}
