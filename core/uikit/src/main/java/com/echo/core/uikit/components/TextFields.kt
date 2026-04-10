@@ -88,9 +88,9 @@ fun EchoTextField(
         ),
 
         //для пароля
-        trailingIcon = {if(isPassword){
+        trailingIcon = { if(isPassword) {
             EchoSecondaryIconButton(
-                onClick = {isVisible = !isVisible},
+                onClick = { isVisible = !isVisible },
                 icon = if(isVisible){Icons.Rounded.Visibility} else Icons.Rounded.VisibilityOff,
                 contentDescription = "change password visibility"
             ) }

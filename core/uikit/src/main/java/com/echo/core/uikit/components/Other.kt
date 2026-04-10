@@ -1,6 +1,5 @@
 package com.echo.core.uikit.components
 
-import android.graphics.Color
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme

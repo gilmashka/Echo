@@ -1,4 +1,4 @@
-package com.echo.features.auth
+package com.echo.features.auth.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,9 +29,9 @@ import com.echo.core.uikit.ui.theme.EchoTheme
 
 @Composable
 fun LoginScreen(){
-
     var nicknameText : String by rememberSaveable() { mutableStateOf("@") }
     var passwordText : String by rememberSaveable() { mutableStateOf("")}
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),

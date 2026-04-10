@@ -18,13 +18,20 @@ import com.echo.core.uikit.ui.theme.EchoTheme
 import androidx.compose.ui.tooling.preview.Preview
 import com.echo.core.uikit.ui.theme.EchoTheme
 import com.echo.core.uikit.components.EchoPrimaryButton
+import com.echo.features.auth.presentation.screens.RegisterScreen
+import com.echo.features.auth.di.DaggerAuthComponent
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val vm = DaggerAuthComponent.create().getViewModel()
 
+            RegisterScreen(onSuccess = { userId ->
+                println("Ура! Мы зарегистрировались, наш ID: $userId")
+            },
+                vm)
         }
     }
 }

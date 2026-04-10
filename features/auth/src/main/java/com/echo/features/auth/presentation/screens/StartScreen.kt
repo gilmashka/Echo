@@ -1,4 +1,4 @@
-package com.echo.features.auth
+package com.echo.features.auth.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
