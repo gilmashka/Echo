@@ -31,6 +31,7 @@ import com.echo.core.uikit.components.EchoDivider
 import com.echo.core.uikit.components.EchoPrimaryButton
 import com.echo.core.uikit.components.EchoTextField
 import com.echo.core.uikit.ui.theme.EchoTheme
+import com.echo.features.auth.di.DaggerAuthComponent
 import com.echo.features.auth.presentation.states.AuthUiState
 import com.echo.features.auth.presentation.viewModels.AuthViewModel
 
@@ -98,11 +99,11 @@ fun LoginScreen(
             EchoPrimaryButton(
                 text = "Вход",
                 onClick = {
-                    val form = UserForm(nicknameText, passwordText)
+                    val form = UserForm(nicknameText, passwordText, firstName = "", lastName = "")
                     viewModel.login(form)
                 },
                 modifier = Modifier.height(55.dp).width(205.dp),
-                enabled = state !is AuthUiState.Loading && nullsLast {  }.isNotBlank() && passwordText.isNotBlank(),
+                enabled = state !is AuthUiState.Loading && nicknameText.isNotBlank() && passwordText.isNotBlank(),
                 icon = Icons.Rounded.PersonAdd
             )
 

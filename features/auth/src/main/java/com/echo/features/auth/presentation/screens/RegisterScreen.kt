@@ -29,6 +29,7 @@ import com.echo.core.network.models.UserForm
 import com.echo.core.uikit.components.EchoDivider
 import com.echo.core.uikit.components.EchoPrimaryButton
 import com.echo.core.uikit.components.EchoTextField
+import com.echo.features.auth.di.DaggerAuthComponent
 import com.echo.features.auth.presentation.states.AuthUiState
 import com.echo.features.auth.presentation.viewModels.AuthViewModel
 
