@@ -1,6 +1,7 @@
 plugins {
     id("base-android-application")
     id("compose-application")
+    id("dagger-module")
 }
 
 android {
@@ -13,4 +14,5 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(project(":features:auth"))
     implementation(project(":core:uikit"))
+    implementation(project(":core:network"))
 }

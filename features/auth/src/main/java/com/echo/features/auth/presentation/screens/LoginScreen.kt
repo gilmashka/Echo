@@ -38,7 +38,7 @@ import com.echo.features.auth.presentation.viewModels.AuthViewModel
 @Composable
 fun LoginScreen(
     onSuccess: (Long) -> Unit,
-    viewModel: AuthViewModel = DaggerAuthComponent.create().getViewModel()
+    viewModel: AuthViewModel
 ){
     val state by viewModel.uiState.collectAsState()
 
@@ -99,7 +99,7 @@ fun LoginScreen(
             EchoPrimaryButton(
                 text = "Вход",
                 onClick = {
-                    val form = UserForm(nicknameText, passwordText, firstName = "", lastName = "")
+                    val form = UserForm(nicknameText, passwordText, firstName = "", lastName = "", city = "")
                     viewModel.login(form)
                 },
                 modifier = Modifier.height(55.dp).width(205.dp),

@@ -26,7 +26,10 @@ import com.echo.core.uikit.ui.theme.EchoTheme
 
 
 @Composable
-fun StartScreen(){
+fun StartScreen(
+    onNavigateToLogin: () -> Unit,
+    onNavigateToRegister: () -> Unit
+){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -60,7 +63,7 @@ fun StartScreen(){
 
             EchoPrimaryButton(
                 text = "Вход",
-                onClick = {},
+                onClick = onNavigateToLogin,
                 modifier = Modifier.height(55.dp).width(205.dp),
                 icon = Icons.Rounded.Login
             )
@@ -69,19 +72,11 @@ fun StartScreen(){
 
             EchoSecondaryButton(
                 text = "Регистрация",
-                onClick = {},
+                onClick = onNavigateToRegister,
                 modifier = Modifier.height(55.dp).width(205.dp),
                 icon = Icons.Rounded.PersonAdd
             )
         }
     }
 
-}
-
-@Preview
-@Composable
-fun StartScreenPreview(){
-    EchoTheme {
-        StartScreen()
-    }
 }

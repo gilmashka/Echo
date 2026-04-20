@@ -1,6 +1,7 @@
 plugins {
     id("base-android-library")
     id("network-module")
+    id("dagger-module")
 }
 
 android {

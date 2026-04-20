@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object ServiceLocator {
 
-    private const val BASE_URL = "http://10.0.2"
+    private const val BASE_URL = "http://10.0.2.2:8080/api/"
 
     var userNickname = ""
     var userPassword = ""
@@ -17,12 +17,18 @@ object ServiceLocator {
     private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
-        .addInterceptor {
-            chain ->
+        .addInterceptor { chain ->
             val original = chain.request()
+            val url = original.url.toString()
+
+
+            if (url.contains("/register")) {
+                return@addInterceptor chain.proceed(original)
+            }
+
             val requestBuilder = original.newBuilder()
 
-            if(userNickname.isNotEmpty() && userPassword.isNotEmpty()){
+            if (userNickname.isNotEmpty() && userPassword.isNotEmpty()) {
                 val credentials = okhttp3.Credentials.basic(userNickname, userPassword)
                 requestBuilder.header("Authorization", credentials)
             }

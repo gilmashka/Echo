@@ -10,6 +10,6 @@ interface EchoApi {
     suspend fun register(@Body form:UserForm): Response<Long>
 
     @POST("login")
-    suspend fun login(): Response<Long>
+    suspend fun login(@Body form: UserForm): Response<Long>
 
 }

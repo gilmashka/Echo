@@ -54,7 +54,11 @@ fun EchoTextField(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
     leadingIcon: ImageVector? = null,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+
+    readOnly: Boolean = false,
+    customTrailingIcon: (@Composable () -> Unit)? = null
+
 ) {
     var isVisible: Boolean by remember { mutableStateOf(true) }
 
@@ -87,17 +91,25 @@ fun EchoTextField(
             unfocusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
 
-        //для пароля
-        trailingIcon = { if(isPassword) {
-            EchoSecondaryIconButton(
-                onClick = { isVisible = !isVisible },
-                icon = if(isVisible){Icons.Rounded.Visibility} else Icons.Rounded.VisibilityOff,
-                contentDescription = "change password visibility"
-            ) }
+        trailingIcon = {
+            if (customTrailingIcon != null) {
+                customTrailingIcon()
+            }
+            else if (isPassword) {
+                EchoSecondaryIconButton(
+                    onClick = { isVisible = !isVisible },
+                    icon = if(isVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
+                    contentDescription = "change password visibility"
+                )
+            }
+
         },
         visualTransformation = if(isPassword && !isVisible){
             PasswordVisualTransformation()}else{
-            VisualTransformation.None}
+            VisualTransformation.None},
+
+        //для списка
+        readOnly = readOnly,
     )
 }
 

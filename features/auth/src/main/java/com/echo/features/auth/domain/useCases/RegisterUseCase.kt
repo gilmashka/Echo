@@ -7,6 +7,7 @@ import javax.inject.Inject
 class RegisterUseCase @Inject constructor (private val repository: AuthRepository) {
 
     suspend operator fun invoke(form: UserForm): Result<Long> {
+
         if(form.nickname.trim().isNotEmpty() && form.password.trim().isNotEmpty()){
             return repository.register(form)
         } else {
