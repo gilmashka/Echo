@@ -38,6 +38,7 @@ import com.echo.features.auth.presentation.viewModels.AuthViewModel
 @Composable
 fun LoginScreen(
     onSuccess: (Long) -> Unit,
+    onBack: () -> Unit,
     viewModel: AuthViewModel
 ){
     val state by viewModel.uiState.collectAsState()

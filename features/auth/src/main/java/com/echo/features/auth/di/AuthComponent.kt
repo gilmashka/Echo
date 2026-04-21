@@ -3,12 +3,11 @@ package com.echo.features.auth.di
 import com.echo.core.network.di.AppComponent
 import com.echo.features.auth.presentation.viewModels.AuthViewModel
 import dagger.Component
-import javax.inject.Singleton
 
 @AuthScope
 @Component(
     dependencies = [AppComponent::class],
-    modules = [RepositoryModule::class]
+    modules = [AuthRepositoryModule::class]
 )
 interface AuthComponent {
 

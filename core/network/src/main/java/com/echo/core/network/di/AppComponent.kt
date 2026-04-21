@@ -5,6 +5,7 @@ import com.echo.core.network.EchoApi
 import com.echo.core.network.storage.AuthStorage
 import dagger.BindsInstance
 import dagger.Component
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Singleton
@@ -14,6 +15,8 @@ interface AppComponent {
 
     fun echoApi() : EchoApi
     fun authStorage(): AuthStorage
+
+    fun retrofit(): Retrofit
 
     @Component.Builder
     interface Builder {

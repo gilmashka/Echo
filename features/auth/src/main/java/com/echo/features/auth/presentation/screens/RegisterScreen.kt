@@ -1,7 +1,6 @@
 package com.echo.features.auth.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,12 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.rounded.AlternateEmail
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.PersonAdd
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,15 +31,13 @@ import com.echo.core.uikit.components.EchoPrimaryButton
 import com.echo.core.uikit.components.EchoTextField
 import com.echo.features.auth.presentation.states.AuthUiState
 import com.echo.features.auth.presentation.viewModels.AuthViewModel
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import com.echo.core.uikit.components.EchoSecondaryButton
-import com.echo.features.auth.presentation.utils.cityOptions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     onSuccess: (Long) -> Unit,
+    onBack: () -> Unit,
     viewModel: AuthViewModel,
 ) {
 
@@ -66,7 +60,7 @@ fun RegisterScreen(
         color = MaterialTheme.colorScheme.background
     ) {
         Column(
-            Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ){

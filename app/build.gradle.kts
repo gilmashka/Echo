@@ -12,7 +12,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.activity.compose)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation(project(":features:auth"))
     implementation(project(":core:uikit"))
     implementation(project(":core:network"))
+    implementation(project(":features:feed"))
 }

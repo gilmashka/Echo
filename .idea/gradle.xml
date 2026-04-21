@@ -28,6 +28,7 @@
             <option value="$PROJECT_DIR$/core/uikit" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/auth" />
+            <option value="$PROJECT_DIR$/features/feed" />
           </set>
         </option>
       </GradleProjectSettings>
