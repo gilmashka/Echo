@@ -1,4 +1,4 @@
-package com.echo
+package com.echo.core.uikit.utils
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel

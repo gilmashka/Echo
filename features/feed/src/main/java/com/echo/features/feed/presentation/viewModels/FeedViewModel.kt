@@ -2,7 +2,6 @@ package com.echo.features.feed.presentation.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.echo.features.feed.domain.repositories.FeedRepository
 import com.echo.features.feed.domain.useCases.GetFeedUseCase
 import com.echo.features.feed.presentation.states.FeedUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +11,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class FeedViewModel @Inject constructor(
-    private val repository: FeedRepository,
     private val useCase: GetFeedUseCase
 ) : ViewModel() {
 

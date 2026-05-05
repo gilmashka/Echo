@@ -3,18 +3,15 @@ package com.echo
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.echo.core.uikit.ui.theme.EchoTheme
+import com.echo.core.uikit.utils.daggerViewModel
 import com.echo.features.auth.di.DaggerAuthComponent
-import com.echo.features.auth.presentation.navigation.AuthScreen
-import com.echo.features.auth.presentation.screens.LoginScreen
-import com.echo.features.auth.presentation.screens.RegisterScreen
-import com.echo.features.auth.presentation.screens.StartScreen
+import com.echo.features.auth.presentation.navigation.AuthNavHost
 import com.echo.features.feed.presentation.screens.FeedScreen
 import com.echo.features.feed.di.DaggerFeedComponent
+import com.echo.features.main.presentation.navigation.MainScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -29,41 +26,27 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             EchoTheme {
-                var currentScreen by remember {
-                    mutableStateOf(if (isLoggedIn) "feed" else AuthScreen.Start.route)
+                val isLoggedIn = remember {
+                    mutableStateOf(appComponent.authStorage().getCredentials() != null)
+
                 }
 
-                when (currentScreen) {
-                    AuthScreen.Start.route -> {
-                        StartScreen(
-                            onNavigateToLogin = { currentScreen = AuthScreen.Login.route },
-                            onNavigateToRegister = { currentScreen = AuthScreen.Register.route }
-                        )
+                if (!isLoggedIn.value) {
+                    val authComponent = remember {
+                        DaggerAuthComponent.builder()
+                            .appComponent(appComponent)
+                            .build()
                     }
 
-                    AuthScreen.Login.route -> {
-                        LoginScreen(
-                            viewModel = daggerViewModel { authComponent.getViewModel() },
-                            onSuccess = { currentScreen = "feed" },
-                            onBack = { currentScreen = AuthScreen.Start.route }
-                        )
-                    }
-
-
-                    AuthScreen.Register.route -> {
-                        RegisterScreen(
-                            viewModel = daggerViewModel { authComponent.getViewModel() },
-                            onSuccess = { currentScreen = "feed" },
-                            onBack = { currentScreen = AuthScreen.Start.route }
-                        )
-                    }
-
-
-                    "feed" -> {
-                        FeedScreen(
-                            viewModel = daggerViewModel { feedComponent.getViewModel() }
-                        )
-                    }
+                    AuthNavHost(
+                        authComponent = authComponent,
+                        onLoginSuccess = { isLoggedIn.value = true },
+                        onRegisterSuccess = { isLoggedIn.value = true }
+                    )
+                } else {
+                    MainScreen(
+                        appComponent = appComponent
+                    )
                 }
             }
         }

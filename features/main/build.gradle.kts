@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.echo.features.auth"
+    namespace = "com.echo.features.main"
 }
 
 dependencies {
@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":core:uikit"))
     implementation(project(":core:network"))
     implementation("androidx.navigation:navigation-compose:2.8.5")
+    implementation(project(":features:feed"))
 }

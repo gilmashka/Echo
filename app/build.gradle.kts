@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":core:uikit"))
     implementation(project(":core:network"))
     implementation(project(":features:feed"))
+    implementation(project(":features:main"))
 }
