@@ -23,25 +23,23 @@ fun EchoEventCard(
     imageUrl: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick },
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.secondary
         ),
-    ){
-        Column() {
+    ) {
+        Column {
             AsyncImage(
                 model = imageUrl,
                 contentDescription = title,
                 modifier = Modifier.fillMaxWidth().height(180.dp),
                 contentScale = ContentScale.Crop
             )
-
             Column(Modifier.padding(16.dp)) {
                 Text(text = title, style = MaterialTheme.typography.titleLarge)
                 Text(text = price, style = MaterialTheme.typography.displayMedium)

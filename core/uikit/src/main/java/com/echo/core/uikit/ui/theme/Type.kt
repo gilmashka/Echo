@@ -41,16 +41,23 @@ val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = SansationFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 64.sp,
+        fontSize = 40.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     displayMedium = TextStyle(
         fontFamily = SansationFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
+        fontSize = 24.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
+    displaySmall = TextStyle(
+        fontFamily = SansationFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    )
 )
 

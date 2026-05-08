@@ -8,7 +8,8 @@ sealed class FeedUiState {
     object Loading : FeedUiState()
 
     data class Content(
-        val feed : FullFeed
+        val feed : FullFeed,
+        val isRefreshing: Boolean = false
     ) : FeedUiState()
 
     data class Error (val message: String) : FeedUiState()

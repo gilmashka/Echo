@@ -11,10 +11,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,15 +27,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.echo.core.uikit.components.EchoDivider
 import com.echo.core.uikit.components.EchoEventCard
+import com.echo.core.uikit.components.EchoPrimaryButton
 import com.echo.features.feed.presentation.states.FeedUiState
 import com.echo.features.feed.presentation.viewModels.FeedViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
-    viewModel: FeedViewModel
-){
-
+    viewModel: FeedViewModel,
+    onEventClick: (Int) -> Unit = {}
+) {
     val state by viewModel.uiState.collectAsState()
+    val pullRefreshState = rememberPullToRefreshState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -59,55 +66,71 @@ fun FeedScreen(
                     }
 
                     is FeedUiState.Content -> {
-
                         val feed = currentState.feed
 
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        PullToRefreshBox(
+                            isRefreshing = currentState.isRefreshing,
+                            onRefresh = { viewModel.refreshFeed() },
+                            state = pullRefreshState,
+                            modifier = Modifier.fillMaxSize()
                         ) {
-                            item{
-                                Text("Любимое", style = MaterialTheme.typography.displayMedium)
-                            }
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                item {
+                                    Text("Любимое", style = MaterialTheme.typography.displayMedium)
+                                }
 
-                            if (feed.showPlaceholder){
-                                item { Text("Вы не выбрали любимые категории") }
-                            } else {
-                                items(feed.favouriteFeed) { event ->
+                                if (feed.showPlaceholder) {
+                                    item { Text("Вы не выбрали любимые категории") }
+                                } else {
+                                    items(feed.favouriteFeed) { event ->
+                                        EchoEventCard(
+                                            title = event.title,
+                                            price = event.price,
+                                            imageUrl = event.imageUrl,
+                                            onClick = { onEventClick(event.id) }
+                                        )
+                                    }
+                                }
+
+                                item {
+                                    Spacer(Modifier.height(5.dp))
+                                    EchoDivider()
+                                    Spacer(Modifier.height(5.dp))
+                                    Text("Все события", style = MaterialTheme.typography.displayMedium)
+                                }
+
+                                items(feed.neutralFeed) { event ->
                                     EchoEventCard(
                                         title = event.title,
                                         price = event.price,
                                         imageUrl = event.imageUrl,
-                                        onClick = {}
+                                        onClick = { onEventClick(event.id) }
                                     )
                                 }
-                            }
-
-                            item {
-                                Spacer(Modifier.height(5.dp))
-                                EchoDivider()
-                                Spacer(Modifier.height(5.dp))
-                                Text("Все события", style = MaterialTheme.typography.displayMedium)
-                            }
-
-                            items(feed.neutralFeed) { event ->
-                                EchoEventCard(
-                                    title = event.title,
-                                    price = event.price,
-                                    imageUrl = event.imageUrl,
-                                    onClick = { }
-                                )
                             }
                         }
                     }
 
                     is FeedUiState.Error -> {
-                        Text(
-                            text = currentState.message,
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
+                        Column(
+                            modifier = Modifier.align(Alignment.Center),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = currentState.message,
+                                color = MaterialTheme.colorScheme.error,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            EchoPrimaryButton(
+                                text = "Повторить",
+                                onClick = { viewModel.loadFeed() }
+                            )
+                        }
                     }
                 }
             }

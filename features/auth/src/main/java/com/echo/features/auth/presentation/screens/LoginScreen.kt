@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.PersonAdd
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.echo.core.network.models.UserForm
 import com.echo.core.uikit.components.EchoDivider
 import com.echo.core.uikit.components.EchoPrimaryButton
+import com.echo.core.uikit.components.EchoSecondaryButton
 import com.echo.core.uikit.components.EchoTextField
 import com.echo.core.uikit.ui.theme.EchoTheme
 import com.echo.features.auth.di.DaggerAuthComponent
@@ -108,6 +110,15 @@ fun LoginScreen(
                 icon = Icons.Rounded.PersonAdd
             )
 
+            Spacer(Modifier.height(25.dp))
+
+            EchoSecondaryButton(
+                text = "Назад",
+                onClick = onBack,
+                modifier = Modifier.height(55.dp).width(205.dp),
+                enabled = state !is AuthUiState.Loading,
+                icon = Icons.Rounded.ArrowBack
+            )
         }
     }
 }

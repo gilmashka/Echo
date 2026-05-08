@@ -40,4 +40,23 @@ class FeedViewModel @Inject constructor(
         }
     }
 
+    fun refreshFeed() {
+        val currentState = _uiState.value
+        if (currentState is FeedUiState.Content) {
+            _uiState.value = currentState.copy(isRefreshing = true)
+        }
+
+        viewModelScope.launch {
+            val result = useCase.invoke()
+
+            result.onSuccess { fullFeed ->
+                _uiState.value = FeedUiState.Content(feed = fullFeed)
+            }.onFailure { error ->
+                _uiState.value = FeedUiState.Error(
+                    message = error.message ?: "Ошибка загрузки"
+                )
+            }
+        }
+    }
+
 }
