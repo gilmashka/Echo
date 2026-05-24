@@ -20,5 +20,7 @@ val surfaceLightColor = Color(0xFFF3F7FF)
 val onSurfaceLightColor = Color(0xFF1C1B1F)
 val errorLightColor = Color(0xFFBA1A1A)
 
+val onErrorColor = Color(0xFFFFFFFF)
+
 
 

@@ -7,5 +7,5 @@ data class UserForm(
     @SerializedName("password") val password: String,
     @SerializedName("firstName") val firstName: String,
     @SerializedName("lastName") val lastName: String,
-    @SerializedName("city") val city: String
+    @SerializedName("city") val city: City
 )

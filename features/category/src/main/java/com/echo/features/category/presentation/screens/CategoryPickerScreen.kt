@@ -45,9 +45,9 @@ fun CategoryPickerScreen(
 
             Text(
                 text = "Интересы",
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.displayLarge,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -93,7 +93,7 @@ fun CategoryPickerScreen(
                                 color = MaterialTheme.colorScheme.error,
                                 textAlign = TextAlign.Center
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
                             EchoPrimaryButton(
                                 text = "Повторить",
                                 onClick = { viewModel.loadCategories() }
@@ -122,7 +122,7 @@ private fun CategoryItem(
         label = category.name,
         state = chipState,
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().height(50.dp),
         positiveIcon = Icons.Rounded.Favorite,
         negativeIcon = Icons.Rounded.ThumbDown,
         neutralIcon = Icons.Rounded.FavoriteBorder

@@ -18,6 +18,8 @@ interface AppComponent {
 
     fun retrofit(): Retrofit
 
+    fun context(): Context
+
     @Component.Builder
     interface Builder {
         @BindsInstance

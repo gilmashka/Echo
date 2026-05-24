@@ -41,8 +41,8 @@ fun EchoEventCard(
                 contentScale = ContentScale.Crop
             )
             Column(Modifier.padding(16.dp)) {
-                Text(text = title, style = MaterialTheme.typography.titleLarge)
-                Text(text = price, style = MaterialTheme.typography.displayMedium)
+                Text(text = title, style = MaterialTheme.typography.displayMedium)
+                Text(text = price, style = MaterialTheme.typography.displaySmall)
             }
         }
     }

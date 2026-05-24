@@ -1,6 +1,5 @@
 package com.echo.features.feed.di
 
-import androidx.compose.runtime.Composable
 import com.echo.core.network.di.AppComponent
 import com.echo.features.feed.presentation.viewModels.FeedViewModel
 import dagger.Component

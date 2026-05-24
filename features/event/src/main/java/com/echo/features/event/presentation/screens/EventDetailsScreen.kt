@@ -109,7 +109,7 @@ private fun EventDetailsContent(
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxHeight()
-                            .fillParentMaxWidth(0.85f),
+                            .fillParentMaxWidth(0.95f),
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -134,7 +134,7 @@ private fun EventDetailsContent(
             if (!event.event.price.isNullOrBlank()) {
                 Text(
                     text = event.event.price,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -154,7 +154,7 @@ private fun EventDetailsContent(
                         dates.forEach { date ->
                             Text(
                                 text = formatDate(date),
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.displaySmall
                             )
                         }
                     }

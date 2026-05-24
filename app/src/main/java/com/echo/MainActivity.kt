@@ -3,13 +3,13 @@ package com.echo
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.echo.core.uikit.ui.theme.EchoTheme
-import com.echo.core.uikit.utils.daggerViewModel
 import com.echo.features.auth.di.DaggerAuthComponent
 import com.echo.features.auth.presentation.navigation.AuthNavHost
-import com.echo.features.feed.presentation.screens.FeedScreen
 import com.echo.features.feed.di.DaggerFeedComponent
 import com.echo.features.main.presentation.navigation.MainScreen
 
@@ -26,12 +26,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             EchoTheme {
-                val isLoggedIn = remember {
+                var isLoggedIn by remember {
                     mutableStateOf(appComponent.authStorage().getCredentials() != null)
-
                 }
 
-                if (!isLoggedIn.value) {
+                if (!isLoggedIn) {
                     val authComponent = remember {
                         DaggerAuthComponent.builder()
                             .appComponent(appComponent)
@@ -40,12 +39,16 @@ class MainActivity : ComponentActivity() {
 
                     AuthNavHost(
                         authComponent = authComponent,
-                        onLoginSuccess = { isLoggedIn.value = true },
-                        onRegisterSuccess = { isLoggedIn.value = true }
+                        onLoginSuccess = { isLoggedIn = true },
+                        onRegisterSuccess = { isLoggedIn = true }
                     )
                 } else {
                     MainScreen(
-                        appComponent = appComponent
+                        appComponent = appComponent,
+                        onLogout = {
+                            appComponent.authStorage().clear()
+                            isLoggedIn = false
+                        }
                     )
                 }
             }

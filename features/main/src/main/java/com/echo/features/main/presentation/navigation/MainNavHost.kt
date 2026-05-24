@@ -3,7 +3,6 @@ package com.echo.features.main.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,12 +13,16 @@ import com.echo.features.feed.di.DaggerFeedComponent
 import com.echo.features.feed.presentation.screens.FeedScreen
 import com.echo.features.category.di.DaggerCategoryComponent
 import com.echo.features.category.presentation.screens.CategoryPickerScreen
-import com.echo.features.event.di.DaggerEventDetailsComponent
-import com.echo.features.event.presentation.screens.EventDetailsScreen
+import com.echo.features.profile.di.DaggerProfileComponent
+import com.echo.features.profile.di.ProfileComponent
+import com.echo.features.profile.presentation.screens.EditProfileScreen
+import com.echo.features.profile.presentation.screens.ProfileScreen
 
 object MainRoutes{
     const val FEED = "feed"
     const val CATEGORIES = "categories"
+    const val PROFILE = "profile"
+    const val PROFILE_EDIT = "profile/edit"
 
 }
 
@@ -28,8 +31,12 @@ fun MainNavHost(
     navController: NavHostController = rememberNavController(),
     appComponent: AppComponent,
     onEventClick: (Int) -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    profileComponent: ProfileComponent,
+    onLogout: () -> Unit = {}
 ){
+    val profileViewModel = daggerViewModel { profileComponent.getViewModel() }
+
     NavHost(
         navController = navController,
         startDestination = MainRoutes.FEED,
@@ -57,6 +64,27 @@ fun MainNavHost(
             }
             CategoryPickerScreen(
                     viewModel = daggerViewModel { categoryComponent.getViewModel() }
+            )
+        }
+
+        composable(MainRoutes.PROFILE) {
+            val profileComponent = remember {
+                DaggerProfileComponent.builder().appComponent(appComponent).build()
+            }
+            ProfileScreen(
+                viewModel = profileViewModel,
+                onNavigateToEdit = { navController.navigate(MainRoutes.PROFILE_EDIT) },
+                onLogout = onLogout
+            )
+        }
+
+        composable(MainRoutes.PROFILE_EDIT) {
+            val profileComponent = remember {
+                DaggerProfileComponent.builder().appComponent(appComponent).build()
+            }
+            EditProfileScreen(
+                viewModel = profileViewModel,
+                onBack = { navController.popBackStack() }
             )
         }
     }

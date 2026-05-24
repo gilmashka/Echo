@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import com.echo.core.network.di.AppComponent
 import com.echo.core.uikit.utils.daggerViewModel
 import com.echo.features.event.di.DaggerEventDetailsComponent
 import com.echo.features.event.presentation.screens.EventDetailsScreen
+import com.echo.features.profile.di.DaggerProfileComponent
 
 data class BottomNavItem(
     val route: String,
@@ -27,11 +29,20 @@ data class BottomNavItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(appComponent: AppComponent) {
+fun MainScreen(
+    appComponent: AppComponent,
+    onLogout: () -> Unit
+    ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var selectedEventId by remember { mutableStateOf<Int?>(null) }
+
+    val profileComponent = remember {
+        DaggerProfileComponent.builder()
+            .appComponent(appComponent)
+            .build()
+    }
 
     val bottomNavItems = listOf<BottomNavItem>(
         BottomNavItem(
@@ -43,6 +54,11 @@ fun MainScreen(appComponent: AppComponent) {
             route = MainRoutes.CATEGORIES,
             label = "Интересы",
             icon = { Icon(Icons.Rounded.FavoriteBorder, contentDescription = "Интересы") }
+        ),
+        BottomNavItem(
+            route = MainRoutes.PROFILE,
+            label = "Профиль",
+            icon = { Icon(Icons.Rounded.Person, contentDescription = "Профиль") }
         )
     )
 
@@ -76,7 +92,7 @@ fun MainScreen(appComponent: AppComponent) {
                             label = { Text(item.label) },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = MaterialTheme.colorScheme.onPrimary,
-                                selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                                selectedTextColor = MaterialTheme.colorScheme.outline,
                                 indicatorColor = MaterialTheme.colorScheme.primary,
                                 unselectedIconColor = MaterialTheme.colorScheme.outline,
                                 unselectedTextColor = MaterialTheme.colorScheme.outline
@@ -93,7 +109,9 @@ fun MainScreen(appComponent: AppComponent) {
                 navController = navController,
                 onEventClick = { eventId ->
                     selectedEventId = eventId
-                }
+                },
+                profileComponent = profileComponent,
+                onLogout = onLogout
             )
 
             selectedEventId?.let { eventId ->

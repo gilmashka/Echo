@@ -8,6 +8,7 @@ interface AuthStorage {
     fun saveSession(nickname: String, password: String, userId: Long)
     fun getCredentials(): Pair<String, String>?
     fun getUserId(): Long
+    fun clear()
 }
 
 class SharedPreferencesAuthStorage @Inject constructor(
@@ -31,4 +32,8 @@ class SharedPreferencesAuthStorage @Inject constructor(
     }
 
     override fun getUserId() = prefs.getLong("uid", -1L)
+
+    override fun clear() {
+        prefs.edit().clear().apply()
+    }
 }

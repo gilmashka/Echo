@@ -33,6 +33,7 @@ import com.echo.core.uikit.components.EchoTextField
 import com.echo.features.auth.presentation.states.AuthUiState
 import com.echo.features.auth.presentation.viewModels.AuthViewModel
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.echo.core.network.models.City
 import com.echo.core.uikit.components.EchoSecondaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -132,7 +133,7 @@ fun RegisterScreen(
             EchoPrimaryButton(
                 text = "Регистрация",
                 onClick = {
-                    val form = UserForm(nickname, password, firstName, lastName, city = cityText)
+                    val form = UserForm(nickname, password, firstName, lastName, city = City.KZN)
                     viewModel.register(form)
                 },
                 modifier = Modifier.height(55.dp).width(205.dp),

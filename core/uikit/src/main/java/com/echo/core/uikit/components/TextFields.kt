@@ -55,62 +55,71 @@ fun EchoTextField(
     isError: Boolean = false,
     leadingIcon: ImageVector? = null,
     isPassword: Boolean = false,
-
     readOnly: Boolean = false,
-    customTrailingIcon: (@Composable () -> Unit)? = null
-
+    customTrailingIcon: (@Composable () -> Unit)? = null,
+    label: String? = null
 ) {
-    var isVisible: Boolean by remember { mutableStateOf(true) }
+    var isVisible: Boolean by remember { mutableStateOf(false) }
 
-    TextField(
-        //основные
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        placeholder = {
-            Text(text = placeholder, style = MaterialTheme.typography.labelSmall)
-        },
+    Column(
+        modifier = modifier
+    ) {
+        if(label != null){
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = if (isError) MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.outline
+            )
+            Spacer(Modifier.height(4.dp))
+        }
 
-        //иконка
-        leadingIcon = if (leadingIcon != null) {
-            { Icon(imageVector = leadingIcon, contentDescription = null) }
-        } else null,
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text(text = placeholder, style = MaterialTheme.typography.labelSmall)
+            },
 
-        //по умолчанию
-        shape = RoundedCornerShape(15.dp),
-        singleLine = true,
-        isError = isError,
-        textStyle = MaterialTheme.typography.labelMedium,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            cursorColor = MaterialTheme.colorScheme.primary,
-            focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            unfocusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer
-        ),
+            leadingIcon = if (leadingIcon != null) {
+                { Icon(imageVector = leadingIcon, contentDescription = null) }
+            } else null,
 
-        trailingIcon = {
-            if (customTrailingIcon != null) {
-                customTrailingIcon()
-            }
-            else if (isPassword) {
-                EchoSecondaryIconButton(
-                    onClick = { isVisible = !isVisible },
-                    icon = if(isVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
-                    contentDescription = "change password visibility"
-                )
-            }
+            shape = RoundedCornerShape(15.dp),
+            singleLine = true,
+            isError = isError,
+            textStyle = MaterialTheme.typography.labelMedium,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = MaterialTheme.colorScheme.primary,
+                focusedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
 
-        },
-        visualTransformation = if(isPassword && !isVisible){
-            PasswordVisualTransformation()}else{
-            VisualTransformation.None},
+            trailingIcon = {
+                if (customTrailingIcon != null) {
+                    customTrailingIcon()
+                }
+                else if (isPassword) {
+                    EchoSecondaryIconButton(
+                        onClick = { isVisible = !isVisible },
+                        icon = if(isVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
+                        contentDescription = "change password visibility"
+                    )
+                }
 
-        //для списка
-        readOnly = readOnly,
-    )
+            },
+            visualTransformation = if(isPassword && !isVisible){
+                PasswordVisualTransformation()}else{
+                VisualTransformation.None},
+
+            readOnly = readOnly,
+        )
+    }
 }
 
 @Composable

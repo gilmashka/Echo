@@ -26,12 +26,14 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/uikit" />
+            <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/auth" />
             <option value="$PROJECT_DIR$/features/category" />
             <option value="$PROJECT_DIR$/features/event" />
             <option value="$PROJECT_DIR$/features/feed" />
             <option value="$PROJECT_DIR$/features/main" />
+            <option value="$PROJECT_DIR$/features/profile" />
           </set>
         </option>
       </GradleProjectSettings>

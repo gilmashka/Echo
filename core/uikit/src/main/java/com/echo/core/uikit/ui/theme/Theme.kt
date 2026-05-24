@@ -37,7 +37,8 @@ private val LightColorScheme = lightColorScheme(
     onSurface = onSurfaceLightColor,
 
     //ошибка
-    error = errorLightColor
+    error = errorLightColor,
+    onError = onErrorColor
 )
 
 

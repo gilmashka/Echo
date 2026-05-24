@@ -1,7 +1,5 @@
 package com.echo.features.feed.domain.useCases
 
-import androidx.activity.compose.ReportDrawn
-import com.echo.features.feed.data.models.ShortEventDto
 import com.echo.features.feed.domain.models.FullFeed
 import com.echo.features.feed.domain.repositories.FeedRepository
 import kotlinx.coroutines.async

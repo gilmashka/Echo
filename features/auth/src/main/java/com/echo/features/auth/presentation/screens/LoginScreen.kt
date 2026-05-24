@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.echo.core.network.models.City
 import com.echo.core.network.models.UserForm
 import com.echo.core.uikit.components.EchoDivider
 import com.echo.core.uikit.components.EchoPrimaryButton
@@ -45,7 +46,7 @@ fun LoginScreen(
 ){
     val state by viewModel.uiState.collectAsState()
 
-    var nicknameText : String by rememberSaveable() { mutableStateOf("@") }
+    var nicknameText : String by rememberSaveable() { mutableStateOf("") }
     var passwordText : String by rememberSaveable() { mutableStateOf("")}
 
     LaunchedEffect(state) {
@@ -81,7 +82,7 @@ fun LoginScreen(
             EchoTextField(
                 value = nicknameText,
                 onValueChange = {nicknameText = it},
-                placeholder = "Nickname (@...)",
+                placeholder = "Nickname",
                 modifier = Modifier.width(350.dp),
                 leadingIcon = Icons.Rounded.AlternateEmail
             )
@@ -102,7 +103,7 @@ fun LoginScreen(
             EchoPrimaryButton(
                 text = "Вход",
                 onClick = {
-                    val form = UserForm(nicknameText, passwordText, firstName = "", lastName = "", city = "")
+                    val form = UserForm(nicknameText, passwordText, firstName = "", lastName = "", city = City.KZN)
                     viewModel.login(form)
                 },
                 modifier = Modifier.height(55.dp).width(205.dp),

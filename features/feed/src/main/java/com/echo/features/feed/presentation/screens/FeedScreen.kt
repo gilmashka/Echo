@@ -84,7 +84,9 @@ fun FeedScreen(
                                 }
 
                                 if (feed.showPlaceholder) {
-                                    item { Text("Вы не выбрали любимые категории") }
+                                    item { Text(
+                                        text = "Вы не выбрали любимые категории",
+                                        style = MaterialTheme.typography.displaySmall) }
                                 } else {
                                     items(feed.favouriteFeed) { event ->
                                         EchoEventCard(
