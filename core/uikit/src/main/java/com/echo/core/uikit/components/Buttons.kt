@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,7 +38,8 @@ fun EchoPrimaryButton(
     onClick:() -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    isDangerous: Boolean = false
 ){
     Button(
         onClick = onClick,
@@ -51,10 +51,15 @@ fun EchoPrimaryButton(
         } else {
             ButtonDefaults.ContentPadding
         },
-        colors = ButtonDefaults.buttonColors(
+        colors = if(!isDangerous){ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
+        )} else {
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.error,
+                contentColor = MaterialTheme.colorScheme.onError
+            )
+        },
         border = null,
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 0.dp,
@@ -126,15 +131,21 @@ fun EchoPrimaryIconButton(
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentDescription: String? = null
+    contentDescription: String? = null,
+    isDangerous: Boolean = false
 ) {
     IconButton(
         onClick = onClick,
         modifier = modifier,
-        colors = IconButtonDefaults.iconButtonColors(
+        colors = if(!isDangerous){IconButtonDefaults.iconButtonColors(
             containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.primary
-        )
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        )} else {
+            IconButtonDefaults.iconButtonColors(
+                containerColor = MaterialTheme.colorScheme.error,
+                contentColor = MaterialTheme.colorScheme.onError
+            )
+        },
     ) {
         Icon(
             imageVector = icon,

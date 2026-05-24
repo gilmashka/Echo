@@ -1,31 +1,57 @@
 package com.echo
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.activity.ComponentActivity
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.echo.core.uikit.ui.theme.EchoTheme
-import androidx.compose.ui.tooling.preview.Preview
-import com.echo.core.uikit.ui.theme.EchoTheme
-import com.echo.core.uikit.components.EchoPrimaryButton
+import com.echo.features.auth.di.DaggerAuthComponent
+import com.echo.features.auth.presentation.navigation.AuthNavHost
+import com.echo.features.feed.di.DaggerFeedComponent
+import com.echo.features.main.presentation.navigation.MainScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
 
+        val appComponent = (application as EchoApplication).appComponent
+        val authComponent = DaggerAuthComponent.builder().appComponent(appComponent).build()
+        val feedComponent = DaggerFeedComponent.builder().appComponent(appComponent).build()
+
+        val isLoggedIn = appComponent.authStorage().getCredentials() != null
+
+        setContent {
+            EchoTheme {
+                var isLoggedIn by remember {
+                    mutableStateOf(appComponent.authStorage().getCredentials() != null)
+                }
+
+                if (!isLoggedIn) {
+                    val authComponent = remember {
+                        DaggerAuthComponent.builder()
+                            .appComponent(appComponent)
+                            .build()
+                    }
+
+                    AuthNavHost(
+                        authComponent = authComponent,
+                        onLoginSuccess = { isLoggedIn = true },
+                        onRegisterSuccess = { isLoggedIn = true }
+                    )
+                } else {
+                    MainScreen(
+                        appComponent = appComponent,
+                        onLogout = {
+                            appComponent.authStorage().clear()
+                            isLoggedIn = false
+                        }
+                    )
+                }
+            }
         }
     }
 }
-
