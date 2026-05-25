@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CurrencyRuble
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.LocationOn
@@ -127,11 +128,25 @@ private fun EventDetailsContent(
             Spacer(modifier = Modifier.height(10.dp))
 
             if (!event.event.price.isNullOrBlank()) {
-                Text(
-                    text = event.event.price,
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Rounded.CurrencyRuble,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.outline,
+                        modifier = Modifier.size(20.dp)
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    Text(
+                        text = event.event.price,
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
@@ -157,7 +172,7 @@ private fun EventDetailsContent(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            if (event.place != null && !event.place.title.isNullOrBlank()) {
+            if (event.place != null && event.place.title.isNotBlank()) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
@@ -172,12 +187,12 @@ private fun EventDetailsContent(
                     Column {
                         Text(
                             text = event.place.title,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.displaySmall
                         )
                         if (!event.place.address.isNullOrBlank()) {
                             Text(
                                 text = event.place.address,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = MaterialTheme.typography.displaySmall,
                                 color = MaterialTheme.colorScheme.outline
                             )
                         }

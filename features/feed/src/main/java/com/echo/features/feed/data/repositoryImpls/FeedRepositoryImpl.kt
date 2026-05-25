@@ -40,4 +40,20 @@ class FeedRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getLikedEvents(): Result<List<ShortEventDto>> {
+        return try {
+            val response = api.getLikedEvents()
+            if (response.isSuccessful) Result.success(response.body() ?: emptyList())
+            else Result.failure(Exception("Ошибка: ${response.code()}"))
+        } catch (e: Exception) { Result.failure(e) }
+    }
+
+    override suspend fun getDislikedEvents(): Result<List<ShortEventDto>> {
+        return try {
+            val response = api.getDislikedEvents()
+            if (response.isSuccessful) Result.success(response.body() ?: emptyList())
+            else Result.failure(Exception("Ошибка: ${response.code()}"))
+        } catch (e: Exception) { Result.failure(e) }
+    }
 }

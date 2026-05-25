@@ -11,4 +11,10 @@ interface FeedApi {
 
     @GET("feed/neutral")
     suspend fun getNeutralFeed(): Response<List<ShortEventDto>>
+
+    @GET("noted/like")
+    suspend fun getLikedEvents(): Response<List<ShortEventDto>>
+
+    @GET("noted/dislike")
+    suspend fun getDislikedEvents(): Response<List<ShortEventDto>>
 }
