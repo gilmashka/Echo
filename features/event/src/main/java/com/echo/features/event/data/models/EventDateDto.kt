@@ -1,10 +1,13 @@
 package com.echo.features.event.data.models
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.google.gson.annotations.SerializedName
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
+@RequiresApi(Build.VERSION_CODES.O)
 data class EventDateDto(
     @SerializedName("start") val start: Long,
     @SerializedName("end") val end: Long
