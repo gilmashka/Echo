@@ -13,9 +13,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.activity.compose)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
     implementation(project(":features:auth"))
     implementation(project(":core:uikit"))
     implementation(project(":core:network"))
     implementation(project(":features:feed"))
     implementation(project(":features:main"))
+    implementation(project(":features:friends"))
 }
