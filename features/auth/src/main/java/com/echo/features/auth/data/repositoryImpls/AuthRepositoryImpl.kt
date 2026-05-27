@@ -1,5 +1,6 @@
 package com.echo.features.auth.data.repositoryImpls
 
+import android.util.Log
 import com.echo.core.network.EchoApi
 import com.echo.core.network.models.UserForm
 import com.echo.core.network.storage.AuthStorage
@@ -11,57 +12,41 @@ class AuthRepositoryImpl @Inject constructor(private val api: EchoApi,
     : AuthRepository {
 
 
-    override suspend fun register(form: UserForm): Result<Long>{
+    override suspend fun register(form: UserForm): Result<Long> {
         return try {
             val response = api.register(form)
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Exception("Ошибка регистрации: ${response.code()}"))
+                val errorBody = response.errorBody()?.string() ?: "Ошибка регистрации"
+                Result.failure(Exception(errorBody))
             }
         } catch (e: Exception) {
-            println(e.message)
-            e.printStackTrace()
             Result.failure(e)
         }
     }
 
-//    override suspend fun login(form: UserForm): Result<Long> {
-//        return try {
-//            val response = api.login(form)
-//            if(response.isSuccessful){
-//
-//                val userId: Long = response.body() ?: throw Exception("ID не получен")
-//
-//                Result.success(response.body()!!)
-//            } else {
-//                Result.failure(Exception("Не удалось войти:" +
-//                        " ${response.code()}"))
-//            }
-//        } catch (e: Exception){
-//            Result.failure(e)
-//        }
-//    }
-
     override fun saveCredentials(nickname: String, password: String, userId: Long) {
-        authStorage.saveSession(nickname, password, userId)
+        authStorage.saveSession(nickname.trim(), password.trim(), userId)
     }
 
     override suspend fun login(form: UserForm): Result<Long> {
         return try {
-            android.util.Log.d("AuthRepo", "login called: ${form.nickname}")
-            val response = api.login(form)
-            android.util.Log.d("AuthRepo", "response code: ${response.code()}")
+            authStorage.saveSession(form.nickname, form.password, 0L)
+            Log.d("AuthRepo", "Checking auth for: ${form.nickname}")
+            val response = api.checkAuth()
+            Log.d("AuthRepo", "CheckAuth response: ${response.code()}")
             if (response.isSuccessful) {
-                val userId: Long = response.body() ?: throw Exception("ID не получен")
-                android.util.Log.d("AuthRepo", "success, userId: $userId")
-                Result.success(userId)
+                Log.d("AuthRepo", "Auth successful")
+                Result.success(0L)
             } else {
-                android.util.Log.e("AuthRepo", "error body: ${response.errorBody()?.string()}")
-                Result.failure(Exception("Не удалось войти: ${response.code()}"))
+                Log.d("AuthRepo", "Auth failed, clearing")
+                authStorage.clear()
+                Result.failure(Exception("Неверный логин или пароль"))
             }
         } catch (e: Exception) {
-            android.util.Log.e("AuthRepo", "exception: ${e.message}", e)
+            Log.d("AuthRepo", "Exception: ${e.message}")
+            authStorage.clear()
             Result.failure(e)
         }
     }

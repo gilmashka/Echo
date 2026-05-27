@@ -32,6 +32,7 @@
             <option value="$PROJECT_DIR$/features/category" />
             <option value="$PROJECT_DIR$/features/event" />
             <option value="$PROJECT_DIR$/features/feed" />
+            <option value="$PROJECT_DIR$/features/friends" />
             <option value="$PROJECT_DIR$/features/main" />
             <option value="$PROJECT_DIR$/features/profile" />
           </set>

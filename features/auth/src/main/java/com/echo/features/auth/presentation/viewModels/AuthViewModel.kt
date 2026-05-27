@@ -24,7 +24,6 @@ class AuthViewModel @Inject constructor(
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
     fun register(form: UserForm){
-        println("=== View MOdel ===")
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
 

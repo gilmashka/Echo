@@ -1,34 +1,36 @@
 package com.echo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.echo.core.uikit.ui.theme.EchoTheme
 import com.echo.features.auth.di.DaggerAuthComponent
 import com.echo.features.auth.presentation.navigation.AuthNavHost
-import com.echo.features.feed.di.DaggerFeedComponent
 import com.echo.features.main.presentation.navigation.MainScreen
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val appComponent = (application as EchoApplication).appComponent
-        val authComponent = DaggerAuthComponent.builder().appComponent(appComponent).build()
-        val feedComponent = DaggerFeedComponent.builder().appComponent(appComponent).build()
-
-        val isLoggedIn = appComponent.authStorage().getCredentials() != null
 
         setContent {
-            EchoTheme {
+
+            var isDarkTheme by remember {
+                mutableStateOf(appComponent.authStorage().isDarkTheme())
+            }
+
+            EchoTheme(darkTheme = isDarkTheme) {
                 var isLoggedIn by remember {
                     mutableStateOf(appComponent.authStorage().getCredentials() != null)
                 }
+                var authKey by remember { mutableStateOf(0L) }
 
                 if (!isLoggedIn) {
                     val authComponent = remember {
@@ -39,17 +41,33 @@ class MainActivity : ComponentActivity() {
 
                     AuthNavHost(
                         authComponent = authComponent,
-                        onLoginSuccess = { isLoggedIn = true },
-                        onRegisterSuccess = { isLoggedIn = true }
-                    )
-                } else {
-                    MainScreen(
-                        appComponent = appComponent,
-                        onLogout = {
-                            appComponent.authStorage().clear()
-                            isLoggedIn = false
+                        onLoginSuccess = {
+                            authKey++
+                            isLoggedIn = true
+                        },
+                        onRegisterSuccess = {
+                            authKey++
+                            isLoggedIn = true
                         }
                     )
+                } else {
+                    key(authKey) {
+                        MainScreen(
+                            appComponent = appComponent,
+                            onLogout = {
+                                appComponent.authStorage().clear()
+                                isLoggedIn = false
+                            },
+                            authKey = authKey,
+                            onThemeToggle = {
+                                isDarkTheme =! isDarkTheme
+                                appComponent.authStorage().setDarkTheme(
+                                    isDarkTheme
+                                )
+                                Log.d("MainActivity", "isDarkTheme: $isDarkTheme")
+                            }
+                        )
+                    }
                 }
             }
         }

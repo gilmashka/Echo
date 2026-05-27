@@ -30,7 +30,7 @@ fun EchoEventCard(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.secondary
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
     ) {
         Column {

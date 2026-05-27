@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":features:category"))
     implementation(project(":features:event"))
     implementation(project(":features:profile"))
+    implementation(project(":features:friends"))
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
@@ -79,6 +80,19 @@ fun LoginScreen(
 
             Spacer(Modifier.height(25.dp))
 
+            if (state is AuthUiState.Error) {
+                Text(
+                    text = (state as AuthUiState.Error).message,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(16.dp))
+            }
+
+            Spacer(Modifier.height(10.dp))
+
             EchoTextField(
                 value = nicknameText,
                 onValueChange = {nicknameText = it},
@@ -103,7 +117,7 @@ fun LoginScreen(
             EchoPrimaryButton(
                 text = "Вход",
                 onClick = {
-                    val form = UserForm(nicknameText, passwordText, firstName = "", lastName = "", city = City.KZN)
+                    val form = UserForm(nicknameText.trim(), passwordText.trim(), firstName = "", lastName = "", city = City.KZN)
                     viewModel.login(form)
                 },
                 modifier = Modifier.height(55.dp).width(205.dp),

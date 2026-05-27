@@ -12,7 +12,9 @@ data class ShortEventDto(
     @SerializedName("title") val title: String,
     @SerializedName("price") val price: String,
     @SerializedName("dates") val dates: List<EventDateDto>,
-    @SerializedName("imageUrl") val imageUrl: String
+    @SerializedName("imageUrl") val imageUrl: String,
+    @SerializedName("isLiked") val isLiked: Boolean = false,
+    @SerializedName("isDisliked") val isDisliked: Boolean = false
 )
 @RequiresApi(Build.VERSION_CODES.O)
 data class EventDateDto(

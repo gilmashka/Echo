@@ -1,5 +1,6 @@
 package com.echo.features.main.presentation.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,10 +8,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -31,14 +34,16 @@ data class BottomNavItem(
 @Composable
 fun MainScreen(
     appComponent: AppComponent,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    authKey: Long = 0,
+    onThemeToggle: () -> Unit = {}
     ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var selectedEventId by remember { mutableStateOf<Int?>(null) }
 
-    val profileComponent = remember {
+    val profileComponent = remember(authKey) {
         DaggerProfileComponent.builder()
             .appComponent(appComponent)
             .build()
@@ -56,6 +61,11 @@ fun MainScreen(
             icon = { Icon(Icons.Rounded.FavoriteBorder, contentDescription = "Интересы") }
         ),
         BottomNavItem(
+            route = MainRoutes.FRIENDS,
+            label = "Друзья",
+            icon = { Icon(Icons.Rounded.People, contentDescription = "Друзья") }
+        ),
+        BottomNavItem(
             route = MainRoutes.PROFILE,
             label = "Профиль",
             icon = { Icon(Icons.Rounded.Person, contentDescription = "Профиль") }
@@ -67,12 +77,14 @@ fun MainScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(20.dp),
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clip(RoundedCornerShape(20.dp)),
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 shadowElevation = 8.dp
             ) {
                 NavigationBar(
+                    modifier = Modifier.fillMaxWidth(),
                     containerColor = Color.Transparent,
                     tonalElevation = 0.dp
                 ) {
@@ -111,7 +123,9 @@ fun MainScreen(
                     selectedEventId = eventId
                 },
                 profileComponent = profileComponent,
-                onLogout = onLogout
+                onLogout = onLogout,
+                authKey = authKey,
+                onThemeToggle = onThemeToggle
             )
 
             selectedEventId?.let { eventId ->

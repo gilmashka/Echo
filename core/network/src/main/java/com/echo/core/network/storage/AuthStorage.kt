@@ -1,6 +1,7 @@
 package com.echo.core.network.storage
 
 import android.content.Context
+import android.util.Log
 import jakarta.inject.Inject
 
 interface AuthStorage {
@@ -9,6 +10,10 @@ interface AuthStorage {
     fun getCredentials(): Pair<String, String>?
     fun getUserId(): Long
     fun clear()
+
+    fun isDarkTheme(): Boolean
+
+    fun setDarkTheme(dark: Boolean)
 }
 
 class SharedPreferencesAuthStorage @Inject constructor(
@@ -18,6 +23,7 @@ class SharedPreferencesAuthStorage @Inject constructor(
     private val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
 
     override fun saveSession(nickname: String, pass: String, userId: Long) {
+        Log.d("AuthStorage", "Saving: $nickname, pass length: ${pass.length}")
         prefs.edit()
             .putString("nick", nickname)
             .putString("pass", pass)
@@ -35,5 +41,11 @@ class SharedPreferencesAuthStorage @Inject constructor(
 
     override fun clear() {
         prefs.edit().clear().apply()
+    }
+
+    override fun isDarkTheme(): Boolean = prefs.getBoolean("dark_theme", false)
+
+    override fun setDarkTheme(dark: Boolean) {
+        prefs.edit().putBoolean("dark_theme", dark).apply()
     }
 }
