@@ -9,9 +9,10 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.navigation.compose)
+
     implementation(project(":core:uikit"))
     implementation(project(":core:network"))
-    implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation(project(":core:utils"))
-    implementation("io.coil-kt:coil-compose:2.6.0")
 }

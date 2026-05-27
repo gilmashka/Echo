@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+
     implementation(project(":core:uikit"))
     implementation(project(":core:network"))
 }
