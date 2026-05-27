@@ -68,7 +68,7 @@ fun FeedScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Главная лента v2.0",
+                text = "Главная лента v3.0",
                 style = MaterialTheme.typography.displayLarge,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
