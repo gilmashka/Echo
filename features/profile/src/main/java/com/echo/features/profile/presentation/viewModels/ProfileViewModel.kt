@@ -32,9 +32,9 @@ class ProfileViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
-    init {
-        loadProfile()
-    }
+//    init {
+//        loadProfile()
+//    }
 
     fun loadProfile() {
         viewModelScope.launch {
@@ -108,10 +108,10 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun deleteProfile() {
+    fun deleteProfile(onSuccess: () -> Unit) {
         viewModelScope.launch {
             deleteProfileUseCase()
-                .onSuccess {  }
+                .onSuccess { onSuccess() }
                 .onFailure {
                     error -> _uiState.value = ProfileUiState.Error(
                         error.message ?: "Ошибка удаления профиля"

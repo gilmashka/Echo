@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.SentimentNeutral
 import androidx.compose.material.icons.rounded.ThumbDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -38,7 +39,8 @@ fun CategoryPickerScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 10.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -123,7 +125,7 @@ private fun CategoryItem(
         state = chipState,
         onClick = onClick,
         modifier = Modifier.fillMaxWidth().height(50.dp),
-        positiveIcon = Icons.Rounded.Favorite,
+        positiveIcon = Icons.Rounded.SentimentNeutral,
         negativeIcon = Icons.Rounded.ThumbDown,
         neutralIcon = Icons.Rounded.FavoriteBorder
     )

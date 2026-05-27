@@ -13,6 +13,8 @@ import com.echo.features.feed.di.DaggerFeedComponent
 import com.echo.features.feed.presentation.screens.FeedScreen
 import com.echo.features.category.di.DaggerCategoryComponent
 import com.echo.features.category.presentation.screens.CategoryPickerScreen
+import com.echo.features.friends.di.DaggerFriendsComponent
+import com.echo.features.friends.presentation.screens.FriendsScreen
 import com.echo.features.profile.di.DaggerProfileComponent
 import com.echo.features.profile.di.ProfileComponent
 import com.echo.features.profile.presentation.screens.EditProfileScreen
@@ -24,6 +26,8 @@ object MainRoutes{
     const val PROFILE = "profile"
     const val PROFILE_EDIT = "profile/edit"
 
+    const val FRIENDS = "friends"
+
 }
 
 @Composable
@@ -33,7 +37,8 @@ fun MainNavHost(
     onEventClick: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
     profileComponent: ProfileComponent,
-    onLogout: () -> Unit = {}
+    onLogout: () -> Unit = {},
+    authKey: Long
 ){
     val profileViewModel = daggerViewModel { profileComponent.getViewModel() }
 
@@ -44,7 +49,7 @@ fun MainNavHost(
     ){
 
         composable(MainRoutes.FEED) {
-           val feedComponent = remember {
+           val feedComponent = remember(authKey) {
                DaggerFeedComponent.builder()
                    .appComponent(appComponent)
                    .build()
@@ -84,8 +89,18 @@ fun MainNavHost(
             }
             EditProfileScreen(
                 viewModel = profileViewModel,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onLogout = onLogout
             )
+        }
+
+        composable(MainRoutes.FRIENDS) {
+            val friendsComponent = remember {
+                DaggerFriendsComponent.builder()
+                    .appComponent(appComponent)
+                    .build()
+            }
+            FriendsScreen(viewModel = daggerViewModel { friendsComponent.getViewModel() })
         }
     }
 }

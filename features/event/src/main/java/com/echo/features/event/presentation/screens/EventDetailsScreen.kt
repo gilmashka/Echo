@@ -1,14 +1,18 @@
 package com.echo.features.event.presentation.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CurrencyRuble
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.People
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.ThumbDown
 import androidx.compose.material.icons.rounded.ThumbDownOffAlt
@@ -19,9 +23,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.echo.core.network.di.NetworkModule
 import com.echo.core.uikit.components.EchoBottomSheet
 import com.echo.core.uikit.components.EchoDivider
 import com.echo.core.uikit.components.EchoImageCarousel
@@ -29,6 +37,7 @@ import com.echo.core.utils.files.formatEventDate
 import com.echo.features.event.data.models.FullEventDto
 import com.echo.features.event.presentation.states.EventDetailsUiState
 import com.echo.features.event.presentation.viewModels.EventDetailsViewModel
+import kotlin.collections.isNullOrEmpty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -218,7 +227,52 @@ private fun EventDetailsContent(
 
             Spacer(modifier = Modifier.height(35.dp))
         }
-    }
+
+        if (!event.likedByFriends.isNullOrEmpty()) {
+            Row(
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    Icons.Rounded.People,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.outline,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Column {
+                    Text(
+                        text = "Нравится друзьям",
+                        style = MaterialTheme.typography.displaySmall
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        event.likedByFriends.forEach { friend ->
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape)
+                                        .background(MaterialTheme.colorScheme.primaryContainer),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    val avatarUrl = friend.avatarPath?.let { NetworkModule.UPLOADS_URL + it }
+                                    if (avatarUrl != null) {
+                                        AsyncImage(model = avatarUrl, contentDescription = null,
+                                            modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                                    } else {
+                                        Icon(Icons.Rounded.Person, null, Modifier.size(18.dp),
+                                            tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                                    }
+                                }
+                                Text(friend.nickname, style = MaterialTheme.typography.labelSmall)
+                            }
+                        }
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+        }    }
 }
 
 @Composable

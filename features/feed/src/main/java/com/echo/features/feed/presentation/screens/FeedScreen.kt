@@ -1,5 +1,6 @@
 package com.echo.features.feed.presentation.screens
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,12 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.People
+import androidx.compose.material.icons.rounded.PeopleOutline
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material.icons.rounded.ThumbDown
@@ -73,6 +76,7 @@ fun FeedScreen(
             Spacer(Modifier.height(15.dp))
             EchoDivider()
             Spacer(Modifier.height(15.dp))
+
             FeedFilterBar(
                 currentFilter = filterMode,
                 onFilterChange = { viewModel.setFilterMode(it) }
@@ -144,15 +148,13 @@ fun FeedEventList(
             when (filterMode) {
                 FeedViewModel.FeedFilterMode.ALL -> {
                     item {
-                        Text(
-                            text = "Любимые категории",
-                            style = MaterialTheme.typography.displayMedium)
+                        Text("Любимые категории", style = MaterialTheme.typography.displayMedium)
                     }
 
                     if (feed.showPlaceholder) {
                         item {
                             Text(
-                                text = "Вы не выбрали любимые категории",
+                                "Вы не выбрали любимые категории",
                                 style = MaterialTheme.typography.displaySmall
                             )
                         }
@@ -233,8 +235,31 @@ fun FeedEventList(
                         }
                     }
                 }
-            }
-        }
+
+                FeedViewModel.FeedFilterMode.FRIENDS -> {
+                    item {
+                        Text("Лента друзей", style = MaterialTheme.typography.displayMedium)
+                    }
+
+                    if (feed.favouriteFeed.isEmpty()) {
+                        item {
+                            Text(
+                                "Нет событий от друзей",
+                                style = MaterialTheme.typography.displaySmall
+                            )
+                        }
+                    } else {
+                        items(feed.favouriteFeed) { event ->
+                            EchoEventCard(
+                                title = event.title,
+                                price = event.price,
+                                imageUrl = event.imageUrl,
+                                onClick = { onEventClick(event.id) }
+                            )
+                        }
+                    }
+                }
+            }        }
     }
 }
 
@@ -246,17 +271,18 @@ private fun FeedFilterBar(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         FilterChip(
             modifier = Modifier.padding(horizontal = 4.dp),
             selected = currentFilter == FeedViewModel.FeedFilterMode.ALL,
             onClick = { onFilterChange(FeedViewModel.FeedFilterMode.ALL) },
-            label = { Text(
-                text = "Все",
-                style = MaterialTheme.typography.displaySmall
-            ) },
+            label = {
+                Text(text = "Все", style = MaterialTheme.typography.displaySmall)
+            },
             leadingIcon = {
                 Icon(
                     if (currentFilter == FeedViewModel.FeedFilterMode.ALL) Icons.Rounded.Search
@@ -267,16 +293,13 @@ private fun FeedFilterBar(
             }
         )
 
-        Spacer(Modifier.width(8.dp))
-
         FilterChip(
             modifier = Modifier.padding(horizontal = 4.dp),
             selected = currentFilter == FeedViewModel.FeedFilterMode.LIKED,
             onClick = { onFilterChange(FeedViewModel.FeedFilterMode.LIKED) },
-            label = { Text(
-                text ="Нравится",
-                style = MaterialTheme.typography.displaySmall
-            ) },
+            label = {
+                Text(text = "Нравится", style = MaterialTheme.typography.displaySmall)
+            },
             leadingIcon = {
                 Icon(
                     if (currentFilter == FeedViewModel.FeedFilterMode.LIKED) Icons.Rounded.Favorite
@@ -287,20 +310,34 @@ private fun FeedFilterBar(
             }
         )
 
-        Spacer(Modifier.width(8.dp))
-
         FilterChip(
             modifier = Modifier.padding(horizontal = 4.dp),
             selected = currentFilter == FeedViewModel.FeedFilterMode.DISLIKED,
             onClick = { onFilterChange(FeedViewModel.FeedFilterMode.DISLIKED) },
-            label = { Text(
-                text = "Скрытое",
-                style = MaterialTheme.typography.displaySmall
-            ) },
+            label = {
+                Text(text = "Скрытое", style = MaterialTheme.typography.displaySmall)
+            },
             leadingIcon = {
                 Icon(
                     if (currentFilter == FeedViewModel.FeedFilterMode.DISLIKED) Icons.Rounded.ThumbDown
                     else Icons.Rounded.ThumbDownOffAlt,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        )
+
+        FilterChip(
+            modifier = Modifier.padding(horizontal = 4.dp),
+            selected = currentFilter == FeedViewModel.FeedFilterMode.FRIENDS,
+            onClick = { onFilterChange(FeedViewModel.FeedFilterMode.FRIENDS) },
+            label = {
+                Text(text = "Друзья", style = MaterialTheme.typography.displaySmall)
+            },
+            leadingIcon = {
+                Icon(
+                    if (currentFilter == FeedViewModel.FeedFilterMode.FRIENDS) Icons.Rounded.People
+                    else Icons.Rounded.PeopleOutline,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )

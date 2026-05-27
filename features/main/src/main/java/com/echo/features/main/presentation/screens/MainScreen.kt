@@ -1,5 +1,6 @@
 package com.echo.features.main.presentation.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -32,14 +34,16 @@ data class BottomNavItem(
 @Composable
 fun MainScreen(
     appComponent: AppComponent,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    authKey: Long = 0
     ) {
+    Log.d("MainScreen", "Recomposing with authKey: $authKey")
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var selectedEventId by remember { mutableStateOf<Int?>(null) }
 
-    val profileComponent = remember {
+    val profileComponent = remember(authKey) {
         DaggerProfileComponent.builder()
             .appComponent(appComponent)
             .build()
@@ -55,6 +59,11 @@ fun MainScreen(
             route = MainRoutes.CATEGORIES,
             label = "Интересы",
             icon = { Icon(Icons.Rounded.FavoriteBorder, contentDescription = "Интересы") }
+        ),
+        BottomNavItem(
+            route = MainRoutes.FRIENDS,
+            label = "Друзья",
+            icon = { Icon(Icons.Rounded.People, contentDescription = "Друзья") }
         ),
         BottomNavItem(
             route = MainRoutes.PROFILE,
@@ -114,7 +123,8 @@ fun MainScreen(
                     selectedEventId = eventId
                 },
                 profileComponent = profileComponent,
-                onLogout = onLogout
+                onLogout = onLogout,
+                authKey = authKey
             )
 
             selectedEventId?.let { eventId ->

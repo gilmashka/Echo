@@ -17,4 +17,7 @@ interface FeedApi {
 
     @GET("noted/dislike")
     suspend fun getDislikedEvents(): Response<List<ShortEventDto>>
+
+    @GET("feed/friends")
+    suspend fun getFriendsFeed(): Response<List<ShortEventDto>>
 }

@@ -27,7 +27,8 @@ import com.echo.core.uikit.components.*
 @Composable
 fun EditProfileScreen(
     viewModel: ProfileViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onLogout: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     val profile = (state as? com.echo.features.profile.presentation.states.ProfileUiState.Content)?.profile ?: return
@@ -195,7 +196,7 @@ fun EditProfileScreen(
             confirmText = "Удалить",
             onConfirm = {
                 showDeleteDialog = false
-                viewModel.deleteProfile()
+                viewModel.deleteProfile(onLogout)
             },
             onDismiss = { showDeleteDialog = false }
         )

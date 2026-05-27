@@ -56,4 +56,19 @@ class FeedRepositoryImpl @Inject constructor(
             else Result.failure(Exception("Ошибка: ${response.code()}"))
         } catch (e: Exception) { Result.failure(e) }
     }
+
+    override suspend fun getFriendsFeed(): Result<List<ShortEventDto>> {
+        return try {
+            val response = api.getFriendsFeed()
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else if (response.code() == 404) {
+                Result.success(emptyList())
+            } else {
+                Result.failure(Exception("Ошибка: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

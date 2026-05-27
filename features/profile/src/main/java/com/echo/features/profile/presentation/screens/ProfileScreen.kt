@@ -41,6 +41,11 @@ fun ProfileScreen(
     onLogout: () -> Unit = {},
     onThemeClick: () -> Unit = { /* TODO: сделать темы */}
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.loadProfile()
+    }
+
     val state by viewModel.uiState.collectAsState()
     var showLogoutDialog by remember { mutableStateOf(false) }
 

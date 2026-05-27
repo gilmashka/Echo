@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.echo.features.feed.domain.useCases.GetDislikedEventsUseCase
 import com.echo.features.feed.domain.useCases.GetFeedUseCase
+import com.echo.features.feed.domain.useCases.GetFriendsFeedUseCase
 import com.echo.features.feed.domain.useCases.GetLikedEventsUseCase
 import com.echo.features.feed.presentation.states.FeedUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 class FeedViewModel @Inject constructor(
     private val getFeedUseCase: GetFeedUseCase,
     private val getLikedEventsUseCase: GetLikedEventsUseCase,
-    private val getDislikedEventsUseCase: GetDislikedEventsUseCase
+    private val getDislikedEventsUseCase: GetDislikedEventsUseCase,
+    private val getFriendsFeedUseCase: GetFriendsFeedUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<FeedUiState>(FeedUiState.Loading)
@@ -24,7 +26,7 @@ class FeedViewModel @Inject constructor(
     private val _filterMode = MutableStateFlow(FeedFilterMode.ALL)
     val filterMode: StateFlow<FeedFilterMode> = _filterMode.asStateFlow()
 
-    enum class FeedFilterMode { ALL, LIKED, DISLIKED }
+    enum class FeedFilterMode { ALL, LIKED, DISLIKED, FRIENDS }
 
     fun setFilterMode(mode: FeedFilterMode) {
         _filterMode.value = mode
@@ -32,10 +34,11 @@ class FeedViewModel @Inject constructor(
             FeedFilterMode.ALL -> loadFeed()
             FeedFilterMode.LIKED -> loadLikedEvents()
             FeedFilterMode.DISLIKED -> loadDislikedEvents()
+            FeedFilterMode.FRIENDS -> loadFriendsFeed()
         }
     }
 
-    init{
+    init {
         loadFeed()
     }
 
@@ -66,6 +69,15 @@ class FeedViewModel @Inject constructor(
         }
     }
 
+    private fun loadFriendsFeed() {
+        viewModelScope.launch {
+            _uiState.value = FeedUiState.Loading
+            getFriendsFeedUseCase()
+                .onSuccess { _uiState.value = FeedUiState.Content(feed = it) }
+                .onFailure { _uiState.value = FeedUiState.Error(it.message ?: "Ошибка") }
+        }
+    }
+
     fun refreshFeed() {
         val current = _uiState.value
         if (current is FeedUiState.Content) _uiState.value = current.copy(isRefreshing = true)
@@ -74,6 +86,7 @@ class FeedViewModel @Inject constructor(
                 FeedFilterMode.ALL -> getFeedUseCase()
                 FeedFilterMode.LIKED -> getLikedEventsUseCase()
                 FeedFilterMode.DISLIKED -> getDislikedEventsUseCase()
+                FeedFilterMode.FRIENDS -> getFriendsFeedUseCase()
             }
             result
                 .onSuccess { _uiState.value = FeedUiState.Content(feed = it) }
