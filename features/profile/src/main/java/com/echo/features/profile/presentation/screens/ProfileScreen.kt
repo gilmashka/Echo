@@ -39,7 +39,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel,
     onNavigateToEdit: () -> Unit,
     onLogout: () -> Unit = {},
-    onThemeClick: () -> Unit = { /* TODO: сделать темы */}
+    onThemeClick: () -> Unit = {}
 ) {
 
     LaunchedEffect(Unit) {
@@ -64,7 +64,7 @@ fun ProfileScreen(
                     profile = currentState.profile,
                     onEditClick = onNavigateToEdit,
                     onLogoutClick = { showLogoutDialog = true },
-                    onThemeClick = { /* TODO */ }
+                    onThemeClick = onThemeClick
                 )
             }
             is ProfileUiState.Error -> {

@@ -1,6 +1,7 @@
 package com.echo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
@@ -20,7 +21,12 @@ class MainActivity : ComponentActivity() {
         val appComponent = (application as EchoApplication).appComponent
 
         setContent {
-            EchoTheme {
+
+            var isDarkTheme by remember {
+                mutableStateOf(appComponent.authStorage().isDarkTheme())
+            }
+
+            EchoTheme(darkTheme = isDarkTheme) {
                 var isLoggedIn by remember {
                     mutableStateOf(appComponent.authStorage().getCredentials() != null)
                 }
@@ -52,7 +58,14 @@ class MainActivity : ComponentActivity() {
                                 appComponent.authStorage().clear()
                                 isLoggedIn = false
                             },
-                            authKey = authKey
+                            authKey = authKey,
+                            onThemeToggle = {
+                                isDarkTheme =! isDarkTheme
+                                appComponent.authStorage().setDarkTheme(
+                                    isDarkTheme
+                                )
+                                Log.d("MainActivity", "isDarkTheme: $isDarkTheme")
+                            }
                         )
                     }
                 }

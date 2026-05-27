@@ -125,8 +125,8 @@ private fun CategoryItem(
         state = chipState,
         onClick = onClick,
         modifier = Modifier.fillMaxWidth().height(50.dp),
-        positiveIcon = Icons.Rounded.SentimentNeutral,
+        positiveIcon = Icons.Rounded.Favorite,
         negativeIcon = Icons.Rounded.ThumbDown,
-        neutralIcon = Icons.Rounded.FavoriteBorder
+        neutralIcon = Icons.Rounded.SentimentNeutral
     )
 }

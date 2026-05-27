@@ -6,10 +6,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-private val DarkColorScheme = darkColorScheme(
-    //TODO - сделать темную тему
-)
-
 private val LightColorScheme = lightColorScheme(
     //фон
     background = backgroundLightColor,
@@ -41,12 +37,29 @@ private val LightColorScheme = lightColorScheme(
     onError = onErrorColor
 )
 
+private val DarkColorScheme = darkColorScheme(
+    background = backgroundDarkColor,
+    primary = primaryDarkColor,
+    secondary = secondaryDarkColor,
+    onPrimary = onPrimaryDarkColor,
+    onSecondary = onSecondaryDarkColor,
+    outline = bordersDarkColor,
+    primaryContainer = primaryContainerDarkColor,
+    onPrimaryContainer = onPrimaryContainerDarkColor,
+    secondaryContainer = secondaryContainerDarkColor,
+    onSecondaryContainer = onSecondaryContainerDarkColor,
+    surface = surfaceDarkColor,
+    onSurface = onSurfaceDarkColor,
+    error = errorDarkColor,
+    onError = onErrorDarkColor
+)
 
 @Composable
 fun EchoTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = LightColorScheme
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,

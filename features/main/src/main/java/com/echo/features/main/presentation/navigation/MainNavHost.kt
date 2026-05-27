@@ -38,7 +38,8 @@ fun MainNavHost(
     modifier: Modifier = Modifier,
     profileComponent: ProfileComponent,
     onLogout: () -> Unit = {},
-    authKey: Long
+    authKey: Long,
+    onThemeToggle: () -> Unit = {}
 ){
     val profileViewModel = daggerViewModel { profileComponent.getViewModel() }
 
@@ -79,7 +80,8 @@ fun MainNavHost(
             ProfileScreen(
                 viewModel = profileViewModel,
                 onNavigateToEdit = { navController.navigate(MainRoutes.PROFILE_EDIT) },
-                onLogout = onLogout
+                onLogout = onLogout,
+                onThemeClick = onThemeToggle
             )
         }
 

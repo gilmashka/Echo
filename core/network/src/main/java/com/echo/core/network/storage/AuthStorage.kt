@@ -10,6 +10,10 @@ interface AuthStorage {
     fun getCredentials(): Pair<String, String>?
     fun getUserId(): Long
     fun clear()
+
+    fun isDarkTheme(): Boolean
+
+    fun setDarkTheme(dark: Boolean)
 }
 
 class SharedPreferencesAuthStorage @Inject constructor(
@@ -37,5 +41,11 @@ class SharedPreferencesAuthStorage @Inject constructor(
 
     override fun clear() {
         prefs.edit().clear().apply()
+    }
+
+    override fun isDarkTheme(): Boolean = prefs.getBoolean("dark_theme", false)
+
+    override fun setDarkTheme(dark: Boolean) {
+        prefs.edit().putBoolean("dark_theme", dark).apply()
     }
 }

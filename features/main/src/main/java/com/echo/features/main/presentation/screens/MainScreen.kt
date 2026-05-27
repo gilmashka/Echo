@@ -35,9 +35,9 @@ data class BottomNavItem(
 fun MainScreen(
     appComponent: AppComponent,
     onLogout: () -> Unit,
-    authKey: Long = 0
+    authKey: Long = 0,
+    onThemeToggle: () -> Unit = {}
     ) {
-    Log.d("MainScreen", "Recomposing with authKey: $authKey")
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -124,7 +124,8 @@ fun MainScreen(
                 },
                 profileComponent = profileComponent,
                 onLogout = onLogout,
-                authKey = authKey
+                authKey = authKey,
+                onThemeToggle = onThemeToggle
             )
 
             selectedEventId?.let { eventId ->
