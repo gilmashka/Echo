@@ -9,7 +9,8 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    api("io.coil-kt:coil-compose:2.6.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    api(libs.coil.compose)
+
     implementation(project(":core:network"))
 }
