@@ -68,7 +68,6 @@ class ProfileViewModel @Inject constructor(
             )
             updateProfileUseCase(form)
                 .onSuccess {
-                    Log.d("ProfileVM", "update success, reloading profile")
                     authStorage.saveSession(
                         nickname = nickname,
                         password = password.ifEmpty { authStorage.getCredentials()?.second.orEmpty() },

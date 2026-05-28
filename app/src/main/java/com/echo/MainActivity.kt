@@ -64,7 +64,6 @@ class MainActivity : ComponentActivity() {
                                 appComponent.authStorage().setDarkTheme(
                                     isDarkTheme
                                 )
-                                Log.d("MainActivity", "isDarkTheme: $isDarkTheme")
                             }
                         )
                     }
