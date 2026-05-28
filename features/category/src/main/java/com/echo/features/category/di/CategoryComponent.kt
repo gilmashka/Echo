@@ -7,7 +7,7 @@ import dagger.Component
 @CategoryScope
 @Component(
     dependencies = [AppComponent::class],
-    modules = [CategoryNetworkModule::class, CategoryRepositoryModule::class]
+    modules = [CategoryNetworkModule::class, CategoryRepositoryModule::class, CategoryDatabaseModule::class]
 )
 interface CategoryComponent {
     fun getViewModel() : CategoryPickerViewModel

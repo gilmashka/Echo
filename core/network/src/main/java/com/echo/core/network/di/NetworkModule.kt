@@ -15,8 +15,8 @@ import javax.inject.Singleton
 class NetworkModule {
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.200:8080/api/"
-        const val UPLOADS_URL = "http://192.168.0.200:8080/uploads/users/"
+        private const val BASE_URL = "http://10.180.92.190:8080/api/"
+        const val UPLOADS_URL = "http://10.180.92.190:8080/uploads/users/"
     }
 
     @Provides
