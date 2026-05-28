@@ -33,19 +33,14 @@ class AuthRepositoryImpl @Inject constructor(private val api: EchoApi,
     override suspend fun login(form: UserForm): Result<Long> {
         return try {
             authStorage.saveSession(form.nickname, form.password, 0L)
-            Log.d("AuthRepo", "Checking auth for: ${form.nickname}")
             val response = api.checkAuth()
-            Log.d("AuthRepo", "CheckAuth response: ${response.code()}")
             if (response.isSuccessful) {
-                Log.d("AuthRepo", "Auth successful")
                 Result.success(0L)
             } else {
-                Log.d("AuthRepo", "Auth failed, clearing")
                 authStorage.clear()
                 Result.failure(Exception("Неверный логин или пароль"))
             }
         } catch (e: Exception) {
-            Log.d("AuthRepo", "Exception: ${e.message}")
             authStorage.clear()
             Result.failure(e)
         }

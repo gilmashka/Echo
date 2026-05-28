@@ -74,9 +74,6 @@ fun MainNavHost(
         }
 
         composable(MainRoutes.PROFILE) {
-            val profileComponent = remember {
-                DaggerProfileComponent.builder().appComponent(appComponent).build()
-            }
             ProfileScreen(
                 viewModel = profileViewModel,
                 onNavigateToEdit = { navController.navigate(MainRoutes.PROFILE_EDIT) },
@@ -86,9 +83,6 @@ fun MainNavHost(
         }
 
         composable(MainRoutes.PROFILE_EDIT) {
-            val profileComponent = remember {
-                DaggerProfileComponent.builder().appComponent(appComponent).build()
-            }
             EditProfileScreen(
                 viewModel = profileViewModel,
                 onBack = { navController.popBackStack() },

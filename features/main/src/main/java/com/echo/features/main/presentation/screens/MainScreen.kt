@@ -84,7 +84,8 @@ fun MainScreen(
                 shadowElevation = 8.dp
             ) {
                 NavigationBar(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .clip(RoundedCornerShape(20.dp)),
                     containerColor = Color.Transparent,
                     tonalElevation = 0.dp
                 ) {

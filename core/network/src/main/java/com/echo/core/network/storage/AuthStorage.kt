@@ -23,7 +23,6 @@ class SharedPreferencesAuthStorage @Inject constructor(
     private val prefs = context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
 
     override fun saveSession(nickname: String, pass: String, userId: Long) {
-        Log.d("AuthStorage", "Saving: $nickname, pass length: ${pass.length}")
         prefs.edit()
             .putString("nick", nickname)
             .putString("pass", pass)

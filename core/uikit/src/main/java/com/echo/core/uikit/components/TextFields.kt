@@ -113,9 +113,11 @@ fun EchoTextField(
                 }
 
             },
-            visualTransformation = if(isPassword && !isVisible){
-                PasswordVisualTransformation()}else{
-                VisualTransformation.None},
+            visualTransformation = if (isPassword && !isVisible) {
+                PasswordVisualTransformation()
+            } else {
+                VisualTransformation.None
+            },
 
             readOnly = readOnly,
         )

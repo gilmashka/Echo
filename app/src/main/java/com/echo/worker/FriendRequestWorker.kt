@@ -55,6 +55,6 @@ class FriendRequestWorker(
             .setAutoCancel(true)
             .build()
 
-        manager.notify(1001, notification)
+        manager.notify(1, notification)
     }
 }

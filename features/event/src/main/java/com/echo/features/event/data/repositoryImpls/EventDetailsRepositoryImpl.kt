@@ -12,9 +12,7 @@ class EventDetailsRepositoryImpl @Inject constructor(
 
     override suspend fun getEventDetails(eventId: Int): Result<FullEventDto> {
         return try {
-            Log.d("EventDetails", "Requesting eventId: $eventId")
             val response = api.getEventDetails(eventId)
-            Log.d("EventDetails", "Response code: ${response.code()}")
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else if (response.code() == 404) {

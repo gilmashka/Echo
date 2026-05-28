@@ -15,8 +15,8 @@ import javax.inject.Singleton
 class NetworkModule {
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.200:8080/api/"
-        const val UPLOADS_URL = "http://192.168.0.200:8080/uploads/users/"
+        private const val BASE_URL = "http://10.180.92.190:8080/api/"
+        const val UPLOADS_URL = "http://10.180.92.190:8080/uploads/users/"
     }
 
     @Provides
@@ -28,19 +28,13 @@ class NetworkModule {
             .addInterceptor { chain ->
                 val original = chain.request()
                 val creds = authStorage.getCredentials()
-
-                android.util.Log.d("OkHttp", "URL: ${original.url}")
-                android.util.Log.d("OkHttp", "Has creds: ${creds != null}")
-
                 val requestBuilder = original.newBuilder()
                 if (creds != null
                     && !original.url.toString().contains("/register")
                     && !original.url.toString().contains("/login")) {
                     val basic = okhttp3.Credentials.basic(creds.first, creds.second)
-                    android.util.Log.d("OkHttp", "Adding Basic Auth: $basic")
                     requestBuilder.header("Authorization", basic)
                 } else {
-                    android.util.Log.d("OkHttp", "Skipping Basic Auth")
                 }
 
                 chain.proceed(requestBuilder.build())
